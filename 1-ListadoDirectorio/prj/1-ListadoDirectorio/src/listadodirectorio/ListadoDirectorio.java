@@ -1,11 +1,14 @@
 package listadodirectorio;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ListadoDirectorio {
   
     public static void main(String[] args) {        
-        String ruta=".";
+        String ruta="/etc";
         if(args.length>=1) ruta=args[0];
         File fich=new File(ruta);        
         if(!fich.exists()) {
@@ -21,9 +24,30 @@ public class ListadoDirectorio {
                 for(File f : ficheros) {
                     String textoDescr=f.isDirectory() ? "/" :
                             f.isFile() ? "_" : "?";
-                    System.out.println("("+textoDescr+") "+f.getName());
+                    String textoDatosExtra = "";
+                    textoDatosExtra = permisos(textoDatosExtra, f);
+                    Date date = new Date(f.lastModified());
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    textoDatosExtra += "ultima vez modificado: " + dateFormat.format(date);
+                    if (f.isFile()) {
+                        textoDatosExtra += ", tamaño=" + f.getTotalSpace();
+                    }
+                    System.out.println("("+textoDescr+") "+f.getName() + textoDatosExtra);
                 }
             }
         }
+    }
+
+    private static String permisos(String textoDatosExtra, File f){
+        if (f.canWrite()){
+            textoDatosExtra += "es modificable, ";
+        }
+        if (f.canRead()){
+            textoDatosExtra += "es legible, ";
+        }
+        if (f.canExecute()){
+            textoDatosExtra += "es ejecutable, ";
+        }
+        return textoDatosExtra;
     }
 }
