@@ -1,3 +1,4 @@
+/*
 package ficheroaccesoaleatorio;
 
 import java.io.File;
@@ -90,3 +91,4 @@ public class FicheroAccesoAleatorio {
     }
 
 }
+*/
